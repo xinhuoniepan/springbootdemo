@@ -1,6 +1,6 @@
 package com.example.springbootdemo.dao;
 
-import com.example.springbootdemo.entity.User;
+import com.example.springbootdemo.bean.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

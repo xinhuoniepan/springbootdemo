@@ -1,11 +1,10 @@
-package com.example.springbootdemo.config;
+package com.example.springbootdemo;
 
+import com.example.springbootdemo.filter.MyFilter;
 import org.apache.catalina.filters.RemoteIpFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.logging.Filter;
 
 @Configuration
 public class WebConfiguration {
