@@ -11,7 +11,7 @@ public class User implements Serializable {
     private static final long serialVersionUID = 950283766379694007L;
     @Id
     @GeneratedValue
-    private int id;
+    private Long id;
     @Column(nullable = false,unique = true)
     private String username;
     @Column(nullable = false)
@@ -37,11 +37,11 @@ public class User implements Serializable {
     public User() {
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
