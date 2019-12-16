@@ -48,9 +48,9 @@ public class UserController {
     */
     @SuppressWarnings("deprecation")
     @RequestMapping("/list")
-    public List<User> getUserList(){
-        int pageNumber = 0;
-        int pageSize = 5;
+    public List<User> getUserList(@PathVariable("pageNumber") int pageNumber,@PathVariable("pageSize") int pageSize){
+//        int pageNumber = 0;
+//        int pageSize = 5;
         //创建时间降序排序
         Pageable pageable = PageRequest.of(pageNumber,pageSize,Sort.Direction.ASC,"age");
         Page<User> pages = userRepository.findAll(pageable);
@@ -59,7 +59,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/findinfo/{id}")
-    public User findUserById(@PathVariable("id") Long id){
+    public User findUserById(@PathVariable("id") Long id) throws Exception{
         return userService.findUserById(id);
     }
 

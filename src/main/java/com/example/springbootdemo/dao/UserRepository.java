@@ -13,11 +13,17 @@ import javax.transaction.Transactional;
 
 @Transactional
 public interface UserRepository extends JpaRepository<User,Long> {
-    User findByUsername(String username);
-    User findByUsernameOrEmail(String username,String email);
-    Page<User> findAll(Pageable pageable);
+    public User findByUsername(String username);
 
-    @Modifying
-    @Query(value = "update user set age = :age where id = :id",nativeQuery = true)
-    void updateNameById(@Param("id") Long id, @Param("age") int age);
+    public User saveUser(User user);
+//    @Query(value = "update user set age = :")
+//    public User updateUser(User user);
+
+////    @Query(value = "delete from user where id = :id",nativeQuery = true)
+//    public void deleteUser(Long id);
+
+    public User findByUsernameOrEmail(String username,String email);
+    public Page<User> findAll(Pageable pageable);
+
+    public void updateNameById(@Param("id") Long id, @Param("age") int age);
 }
