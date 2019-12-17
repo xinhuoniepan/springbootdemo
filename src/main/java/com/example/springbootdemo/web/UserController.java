@@ -1,6 +1,5 @@
 package com.example.springbootdemo.web;
 
-import com.example.springbootdemo.dao.UserRepository;
 import com.example.springbootdemo.bean.User;
 import com.example.springbootdemo.service.UserService;
 import com.example.springbootdemo.util.NeoProperties;
@@ -19,8 +18,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private NeoProperties neoProperties;
@@ -30,8 +27,8 @@ public class UserController {
 
     @RequestMapping("/getuser")
     @Cacheable(value = "user-key")
-    public User getUser(){
-        User user = userRepository.findByUsername("aa");
+    public User getUser() throws Exception{
+        User user = userService.findUserByName("aa");
         return user;
     }
     @RequestMapping("/config")
@@ -53,7 +50,7 @@ public class UserController {
 //        int pageSize = 5;
         //创建时间降序排序
         Pageable pageable = PageRequest.of(pageNumber,pageSize,Sort.Direction.ASC,"age");
-        Page<User> pages = userRepository.findAll(pageable);
+        Page<User> pages = userService.findAll(pageable);
         List<User> list = pages.getContent();
         return list;
     }
@@ -61,6 +58,12 @@ public class UserController {
     @RequestMapping(value = "/api/findinfo/{id}")
     public User findUserById(@PathVariable("id") Long id) throws Exception{
         return userService.findUserById(id);
+    }
+
+    @RequestMapping(value = "/save")
+    public void saveUser() throws Exception{
+        User user = new User("aa", "test","test@test","wa",null,26);
+        userService.saveUser(user);
     }
 
 }
