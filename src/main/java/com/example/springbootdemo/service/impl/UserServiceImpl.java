@@ -1,10 +1,11 @@
 package com.example.springbootdemo.service.impl;
 
 import com.example.springbootdemo.bean.User;
-import com.example.springbootdemo.dao.UserDao;
+import com.example.springbootdemo.dao.UserMapper;
 import com.example.springbootdemo.service.UserService;
-import com.example.springbootdemo.util.JsonUtils;
-import com.example.springbootdemo.util.RedisConfig;
+import com.example.springbootdemo.util.*;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,7 +24,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private RedisTemplate<String,String> redisTemplate;
     @Autowired
-    private UserDao userDao;
+    private UserMapper userMapper;
 
     /**
      * 获取用户逻辑： 如果缓存存在，从缓存中获取用户信息 如果缓存不存在，从 DB 中获取用户信息，然后插入缓存
@@ -30,43 +32,50 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserById(Long id) {
         User user = null;
-//        String key = RedisConfig.USER_LEY + id;
-//        ValueOperations<String,String> redisUtil = redisTemplate.opsForValue();
-//        Boolean flag = redisTemplate.hasKey(key);
-//        //缓存存在
-//        if(flag){
-//            Object object = redisUtil.get(key);
-//            user = JsonUtils.json2Object(object.toString(),User.class);
-//        } else {
-//            Optional<User> optionalUser = userDao.findById(id);
-//            if (null != optionalUser){
-//                user = optionalUser.get();
-//                redisUtil.set(key,JsonUtils.object2Json(user));
-//            }
-//        }
+        String key = RedisConfig.USER_LEY + id;
+        ValueOperations<String,String> redisUtil = redisTemplate.opsForValue();
+        Boolean flag = redisTemplate.hasKey(key);
+        //缓存存在
+        if(flag){
+            Object object = redisUtil.get(key);
+            user = JsonUtils.json2Object(object.toString(),User.class);
+        } else {
+            user = userMapper.selectByPrimaryKey(id);
+            if (null != user){
+                redisUtil.set(key,JsonUtils.object2Json(user));
+            }
+        }
         return user;
     }
 
     @Override
     public User findUserByName(String username) {
-//        return userDao.findUserByName(username);
-        return null;
-    }
-
-    @Override
-    public Page<User> findAll(Pageable pageable) {
-//        return userDao.findAll(pageable);
-        return null;
+        return userMapper.findUserByName(username);
     }
 
     /*
-    * 保存用户信息
+    * 查询用户全部信息
     */
+    @Override
+    public List<User> selectAll() {
+        return userMapper.selectAll();
+    }
+
+    /*
+    * 分页查询用户信息
+    */
+    @Override
+    public PageResult selectPage(PageRequest pageRequest) {
+        return PageUtils.getPageResult(pageRequest,getPageInfo(pageRequest));
+    }
+
+    /*
+     * 分页查询用户信息
+     */
     @Override
     public void saveUser(User user) {
         if(user != null){
-            userDao.saveUser(user);
-        }
+            userMapper.insert(user);        }
     }
 
     /**
@@ -113,4 +122,18 @@ public class UserServiceImpl implements UserService {
 //            logger.info("UserServiceImpl.deleteUser():从缓存中删除用户 ： id>>" + id );
 //        }
 //    }
+
+
+    /**
+     * 调用分页插件完成分页
+     * @param pageRequest
+     * @return
+     */
+    private PageInfo<User> getPageInfo(PageRequest pageRequest) {
+        int pageNum = pageRequest.getPageNum();
+        int pageSize = pageRequest.getPageSize();
+        PageHelper.startPage(pageNum, pageSize);
+        List<User> sysMenus = userMapper.selectPage();
+        return new PageInfo<User>(sysMenus);
+    }
 }

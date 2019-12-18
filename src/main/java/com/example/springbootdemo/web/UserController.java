@@ -3,17 +3,11 @@ package com.example.springbootdemo.web;
 import com.example.springbootdemo.bean.User;
 import com.example.springbootdemo.service.UserService;
 import com.example.springbootdemo.util.NeoProperties;
+import com.example.springbootdemo.util.PageRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -25,7 +19,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping("/getuser")
+    @RequestMapping("/selectUserByName")
     @Cacheable(value = "user-key")
     public User getUser() throws Exception{
         User user = userService.findUserByName("aa");
@@ -44,25 +38,33 @@ public class UserController {
     * 分业查询数据
     */
     @SuppressWarnings("deprecation")
-    @RequestMapping("/list")
-    public List<User> getUserList(@PathVariable("pageNumber") int pageNumber,@PathVariable("pageSize") int pageSize){
-//        int pageNumber = 0;
-//        int pageSize = 5;
-        //创建时间降序排序
-        Pageable pageable = PageRequest.of(pageNumber,pageSize,Sort.Direction.ASC,"age");
-        Page<User> pages = userService.findAll(pageable);
-        List<User> list = pages.getContent();
-        return list;
+    @RequestMapping(value = "/selectPage",method = RequestMethod.POST)
+    public Object getUserList(@RequestBody PageRequest pageRequest){
+        return userService.selectPage(pageRequest);
     }
 
+    /*
+     * 查询全部用户
+     */
+    @RequestMapping(value = "/selectAll")
+    public Object getUserList(){
+        return userService.selectAll();
+    }
+
+    /*
+     * 通过用户名来查询用户
+     */
     @RequestMapping(value = "/api/findinfo/{id}")
     public User findUserById(@PathVariable("id") Long id) throws Exception{
         return userService.findUserById(id);
     }
 
+    /*
+    * 添加用户
+    */
     @RequestMapping(value = "/save")
     public void saveUser() throws Exception{
-        User user = new User("aa", "test","test@test","wa",null,26);
+        User user = new User(1L,26, "test1@test","啊哇","test",null,"bb");
         userService.saveUser(user);
     }
 
