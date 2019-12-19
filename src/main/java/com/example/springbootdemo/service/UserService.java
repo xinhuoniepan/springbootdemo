@@ -1,5 +1,6 @@
 package com.example.springbootdemo.service;
 
+import com.example.springbootdemo.bean.ResponseResult;
 import com.example.springbootdemo.bean.User;
 import com.example.springbootdemo.util.PageRequest;
 import com.example.springbootdemo.util.PageResult;
@@ -14,7 +15,7 @@ public interface UserService {
     public User findUserByName(String username) throws Exception;
     public List<User> selectAll();
     PageResult selectPage(PageRequest pageRequest);
-    public void saveUser(User user) throws Exception;
-//    public void updateUser(User user) throws Exception;
-//    public void deleteUser(Long id) ;
+    public ResponseResult saveUser(User user) throws Exception;
+    public ResponseResult updateUser(User user) throws Exception;
+    public ResponseResult deleteUser(Long id) throws Exception;
 }

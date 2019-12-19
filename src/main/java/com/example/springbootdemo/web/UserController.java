@@ -1,5 +1,6 @@
 package com.example.springbootdemo.web;
 
+import com.example.springbootdemo.bean.ResponseResult;
 import com.example.springbootdemo.bean.User;
 import com.example.springbootdemo.service.UserService;
 import com.example.springbootdemo.util.NeoProperties;
@@ -54,7 +55,7 @@ public class UserController {
     /*
      * 通过用户名来查询用户
      */
-    @RequestMapping(value = "/api/findinfo/{id}")
+    @RequestMapping(value = "/findinfo/{id}")
     public User findUserById(@PathVariable("id") Long id) throws Exception{
         return userService.findUserById(id);
     }
@@ -62,10 +63,32 @@ public class UserController {
     /*
     * 添加用户
     */
-    @RequestMapping(value = "/save")
-    public void saveUser() throws Exception{
-        User user = new User(1L,26, "test1@test","啊哇","test",null,"bb");
-        userService.saveUser(user);
+    @RequestMapping(value = "/save",method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseResult saveUser(@RequestBody User user) throws Exception{
+        return userService.saveUser(user);
+    }
+
+    /*
+    * 通过id删除用户
+    */
+    @RequestMapping(value = "/deleteById",method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseResult deleteUsers(@RequestBody String id) throws Exception{
+        if(id != null) {
+            Long nid = Long.valueOf(id);
+            return userService.deleteUser(nid);
+        }
+        return new ResponseResult(true,"失败");
+     }
+
+    /*
+     * 修改用户信息
+     */
+    @RequestMapping(value = "/updateUser",method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseResult updateUser(@RequestBody User user) throws Exception{
+        return userService.updateUser(user);
     }
 
 }

@@ -75,14 +75,4 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.example.springbootdemo.bean.User" >
-    update user
-    set age = #{age,jdbcType=INTEGER},
-      email = #{email,jdbcType=VARCHAR},
-      nick_name = #{nickName,jdbcType=VARCHAR},
-      password = #{password,jdbcType=VARCHAR},
-      reg_time = #{regTime,jdbcType=VARCHAR},
-      username = #{username,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
 </mapper>
