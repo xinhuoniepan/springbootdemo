@@ -23,6 +23,7 @@ public class User {
         this.password = password;
         this.regTime = regTime;
         this.username = username;
+
     }
 
     public User() {
