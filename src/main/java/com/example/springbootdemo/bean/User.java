@@ -15,6 +15,7 @@ public class User {
 
     private String username;
 
+
     public User(Long id,Integer age, String email, String nickName, String password, String regTime, String username) {
         this.id = id;
         this.age = age;
