@@ -3,8 +3,12 @@ package com.example.springbootdemo.web;
 import com.example.springbootdemo.bean.ResponseResult;
 import com.example.springbootdemo.bean.User;
 import com.example.springbootdemo.service.UserService;
+import com.example.springbootdemo.util.CommonRequestEntity;
+import com.example.springbootdemo.util.JsonUtils;
 import com.example.springbootdemo.util.NeoProperties;
 import com.example.springbootdemo.util.PageRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private NeoProperties neoProperties;
@@ -65,8 +71,11 @@ public class UserController {
     */
     @RequestMapping(value = "/save",method = RequestMethod.POST)
     @ResponseBody
-    public ResponseResult saveUser(@RequestBody User user) throws Exception{
-        return userService.saveUser(user);
+    public ResponseResult saveUser(@RequestBody CommonRequestEntity user) throws Exception{
+        logger.info(user.getData().toString());
+        User user1 = JsonUtils.json2Object(JsonUtils.object2Json(user.getData()),User.class);
+        ResponseResult result = userService.saveUser(user1);
+        return result;
     }
 
     /*

@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserById(Long id) {
         User user = null;
-        String key = RedisConfig.USER_LEY + id;
+        String key = RedisConfig.USER_KEY + id;
         ValueOperations<String, String> redisUtil = redisTemplate.opsForValue();
         Boolean flag = redisTemplate.hasKey(key);
         //缓存存在
@@ -110,7 +110,7 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new UserException("user为空!!!");
         }
-        String key = RedisConfig.USER_LEY + user.getId();
+        String key = RedisConfig.USER_KEY + user.getId();
         ValueOperations<String,String> redisUtil = redisTemplate.opsForValue();
         Boolean flag = redisTemplate.hasKey(key);
         //缓存存在,进行更新，缓存不存在，不进行添加
@@ -137,7 +137,7 @@ public class UserServiceImpl implements UserService {
             responseResult.setMessage("数据删除失败");
             throw new UserException("数据库中id为" + id + "的数据不存在");
         }
-        String key = RedisConfig.USER_LEY + id;
+        String key = RedisConfig.USER_KEY + id;
         Boolean flag = redisTemplate.hasKey(key);
         if (flag) {
             redisTemplate.delete(key);

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.springbootdemo.dao.DocumentRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.example.springbootdemo.bean.DocumentRecord" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="document_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="document_description" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="document_url" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="document_type" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, document_name, document_description, document_url, document_type
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from documentRecord
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from documentRecord
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from documentRecord
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.springbootdemo.bean.DocumentRecord" >
+    insert into documentRecord (id, document_name, document_description, 
+      document_url, document_type)
+    values (#{id,jdbcType=INTEGER}, #{documentName,jdbcType=VARCHAR}, #{documentDescription,jdbcType=VARCHAR}, 
+      #{documentUrl,jdbcType=VARCHAR}, #{documentType,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.springbootdemo.bean.DocumentRecord" >
+    insert into documentRecord
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="documentName != null" >
+        document_name,
+      </if>
+      <if test="documentDescription != null" >
+        document_description,
+      </if>
+      <if test="documentUrl != null" >
+        document_url,
+      </if>
+      <if test="documentType != null" >
+        document_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="documentName != null" >
+        #{documentName,jdbcType=VARCHAR},
+      </if>
+      <if test="documentDescription != null" >
+        #{documentDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="documentUrl != null" >
+        #{documentUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="documentType != null" >
+        #{documentType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.springbootdemo.bean.DocumentRecord" >
+    update documentRecord
+    <set >
+      <if test="documentName != null" >
+        document_name = #{documentName,jdbcType=VARCHAR},
+      </if>
+      <if test="documentDescription != null" >
+        document_description = #{documentDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="documentUrl != null" >
+        document_url = #{documentUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="documentType != null" >
+        document_type = #{documentType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.springbootdemo.bean.DocumentRecord" >
+    update documentRecord
+    set document_name = #{documentName,jdbcType=VARCHAR},
+      document_description = #{documentDescription,jdbcType=VARCHAR},
+      document_url = #{documentUrl,jdbcType=VARCHAR},
+      document_type = #{documentType,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
