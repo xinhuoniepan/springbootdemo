@@ -36,7 +36,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.18</version>
+            <version>8.0.28</version>
         </dependency>
 
         <!-- springboot redis依赖 -->
@@ -49,7 +49,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.18</version>
+            <version>8.0.28</version>
         </dependency>
         <!-- mybatis-generator-core 反向生成java代码-->
 
